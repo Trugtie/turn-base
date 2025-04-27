@@ -6,9 +6,9 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetMouseButton(0))
         {
-            SetTargetPosition(new Vector3(4, 0, 4));
+            SetTargetPosition(MouseWorld.GetPosition());
         }
 
         float stopThresoldDistance = 0.1f;
