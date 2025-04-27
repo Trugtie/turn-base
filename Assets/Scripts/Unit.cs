@@ -11,15 +11,11 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
+        _targetPosition = transform.position;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            SetTargetPosition(MouseWorld.GetPosition());
-        }
-
         float stopThresoldDistance = 0.1f;
         float moveDistance = Vector3.Distance(transform.position, _targetPosition);
         _animator.SetBool(IS_WALKING, false);
