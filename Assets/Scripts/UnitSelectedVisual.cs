@@ -9,7 +9,7 @@ public class UnitSelectedVisual : MonoBehaviour
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _unit = GetComponentInParent<Unit>();
-        Hide();
+        UpdateVisual();
     }
 
     private void Start()
@@ -18,6 +18,11 @@ public class UnitSelectedVisual : MonoBehaviour
     }
 
     private void UnitActionSystem_OnSelectedUnitChange(object sender, System.EventArgs e)
+    {
+        UpdateVisual();
+    }
+
+    private void UpdateVisual()
     {
         bool isSelected = UnitActionSystem.Instance.GetSelectedUnit() == _unit;
 

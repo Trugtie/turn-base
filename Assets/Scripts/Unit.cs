@@ -23,6 +23,7 @@ public class Unit : MonoBehaviour
 
         float speed = 4f;
         Vector3 moveDirection = (_targetPosition - transform.position).normalized;
+        moveDirection.y = 0;
         transform.position += speed * Time.deltaTime * moveDirection;
 
         float rotateSpeed = 10f;
