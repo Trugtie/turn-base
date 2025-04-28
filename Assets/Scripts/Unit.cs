@@ -8,10 +8,15 @@ public class Unit : MonoBehaviour
 
     private Vector3 _targetPosition;
 
+    private GridPosition _gridPosition;
+
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
         _targetPosition = transform.position;
+
+        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+        LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
     }
 
     private void Update()
@@ -30,10 +35,22 @@ public class Unit : MonoBehaviour
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
 
         _animator.SetBool(IS_WALKING, true);
+
+        GridPosition newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+        if (newGridPosition != _gridPosition)
+        {
+            LevelGrid.Instance.MoveUnitToGridPosition(this, _gridPosition, newGridPosition);
+            _gridPosition = newGridPosition;
+        }
     }
 
     public void SetTargetPosition(Vector3 targetPosition)
     {
         _targetPosition = targetPosition;
+    }
+
+    public override string ToString()
+    {
+        return $"Unit: {gameObject.name}";
     }
 }

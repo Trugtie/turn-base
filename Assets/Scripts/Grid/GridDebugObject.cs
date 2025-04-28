@@ -14,6 +14,10 @@ public class GridDebugObject : MonoBehaviour
     public void SetGridObject(GridObject gridObject)
     {
         _gridObject = gridObject;
+    }
+
+    private void Update()
+    {
         UpdateVisualData();
     }
 

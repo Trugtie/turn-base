@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 33439129}
   - component: {fileID: 33439128}
   m_Layer: 0
-  m_Name: GridSystemTesting
+  m_Name: Testing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60cf6b4a12908934cb03b173c721bddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridDebugObject: {fileID: 2611473638577779324, guid: 5b2853ae6dd34b146a4ba0051ee496ca, type: 3}
 --- !u!4 &33439129
 Transform:
   m_ObjectHideFlags: 0
@@ -528,6 +527,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
+--- !u!1 &1290795521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290795523}
+  - component: {fileID: 1290795522}
+  m_Layer: 0
+  m_Name: LevelGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1290795522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290795521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501ec5a94434828478d998e1e7440a21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gridDebugObject: {fileID: 2611473638577779324, guid: 5b2853ae6dd34b146a4ba0051ee496ca, type: 3}
+--- !u!4 &1290795523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290795521}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1624353388
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,7 +790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8875225349381956001, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.8
+      value: 4.117
       objectReference: {fileID: 0}
     - target: {fileID: 8875225349381956001, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
       propertyPath: m_LocalPosition.y
@@ -754,7 +798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8875225349381956001, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.82
+      value: 6.283
       objectReference: {fileID: 0}
     - target: {fileID: 8875225349381956001, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
       propertyPath: m_LocalRotation.w
@@ -802,3 +846,4 @@ SceneRoots:
   - {fileID: 1624353390}
   - {fileID: 1975826133}
   - {fileID: 33439129}
+  - {fileID: 1290795523}
