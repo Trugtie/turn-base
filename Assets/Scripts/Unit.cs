@@ -14,7 +14,10 @@ public class Unit : MonoBehaviour
     {
         _animator = GetComponentInChildren<Animator>();
         _targetPosition = transform.position;
+    }
 
+    private void Start()
+    {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
     }
