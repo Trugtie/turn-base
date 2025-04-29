@@ -1,4 +1,4 @@
-using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +39,7 @@ public class MoveAction : BaseAction
         if (moveDistance < stopThresoldDistance)
         {
             _isActive = false;
+            OnActionComplete();
             return;
         };
 
@@ -79,10 +80,11 @@ public class MoveAction : BaseAction
         return validListGridPosition;
     }
 
-    public void Move(GridPosition targetPosition)
+    public void Move(GridPosition targetPosition, Action onActionComplete)
     {
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         _isActive = true;
+        OnActionComplete = onActionComplete;
     }
 
 

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class UnitActionSystem : MonoBehaviour
 {
@@ -10,6 +9,8 @@ public class UnitActionSystem : MonoBehaviour
 
     [SerializeField] private Unit _selectedUnit;
     [SerializeField] private LayerMask _unitLayerMask;
+
+    private bool _isBusy;
 
     private void Awake()
     {
@@ -23,6 +24,8 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Update()
     {
+        if (_isBusy) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if (TryHandleUnitSelection()) return;
@@ -32,14 +35,15 @@ public class UnitActionSystem : MonoBehaviour
 
             if (_selectedUnit.GetMoveAction().IsValidActionGridPosition(gridPosition))
             {
-                _selectedUnit.GetMoveAction().Move(gridPosition);
-
+                _selectedUnit.GetMoveAction().Move(gridPosition, ClearBusy);
+                SetBusy();
             }
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            _selectedUnit.GetSpinAction().Spin();
+            SetBusy();
+            _selectedUnit.GetSpinAction().Spin(ClearBusy);
         }
     }
 
@@ -66,5 +70,15 @@ public class UnitActionSystem : MonoBehaviour
     public Unit GetSelectedUnit()
     {
         return _selectedUnit;
+    }
+
+    public void SetBusy()
+    {
+        _isBusy = true;
+    }
+
+    public void ClearBusy()
+    {
+        _isBusy = false;
     }
 }

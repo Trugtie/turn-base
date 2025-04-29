@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SpinAction : BaseAction
@@ -13,12 +14,16 @@ public class SpinAction : BaseAction
         _totalSpinAmount += spinAddAmount;
 
         if (_totalSpinAmount >= 360f)
+        {
             _isActive = false;
+            OnActionComplete();
+        }
     }
 
-    public void Spin()
+    public void Spin(Action onActionComplete)
     {
         _totalSpinAmount = 0;
         _isActive = true;
+        OnActionComplete = onActionComplete;
     }
 }
