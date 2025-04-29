@@ -67,4 +67,7 @@ public class GridSystem
             && gridPosition.X < _width
             && gridPosition.Z < _height;
     }
+
+    public int GetWidth() => _width;
+    public int GetHeight() => _height;
 }
