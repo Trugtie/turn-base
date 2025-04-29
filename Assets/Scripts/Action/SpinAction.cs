@@ -16,7 +16,7 @@ public class SpinAction : BaseAction
         if (_totalSpinAmount >= 360f)
         {
             _isActive = false;
-            OnActionComplete();
+            _onActionComplete();
         }
     }
 
@@ -24,6 +24,11 @@ public class SpinAction : BaseAction
     {
         _totalSpinAmount = 0;
         _isActive = true;
-        OnActionComplete = onActionComplete;
+        _onActionComplete = onActionComplete;
+    }
+
+    public override string GetActionName()
+    {
+        return "Spin";
     }
 }

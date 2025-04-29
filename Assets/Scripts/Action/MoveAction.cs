@@ -39,7 +39,7 @@ public class MoveAction : BaseAction
         if (moveDistance < stopThresoldDistance)
         {
             _isActive = false;
-            OnActionComplete();
+            _onActionComplete();
             return;
         };
 
@@ -84,8 +84,12 @@ public class MoveAction : BaseAction
     {
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         _isActive = true;
-        OnActionComplete = onActionComplete;
+        _onActionComplete = onActionComplete;
     }
 
+    public override string GetActionName()
+    {
+        return "Move";
+    }
 
 }
