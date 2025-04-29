@@ -23,7 +23,7 @@ public class UnitActionSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             if (TryHandleUnitSelection()) return;
             if (_selectedUnit == null) return;
@@ -35,6 +35,11 @@ public class UnitActionSystem : MonoBehaviour
                 _selectedUnit.GetMoveAction().Move(gridPosition);
 
             }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            _selectedUnit.GetSpinAction().Spin();
         }
     }
 

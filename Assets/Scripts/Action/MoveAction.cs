@@ -2,43 +2,49 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private int _maxMoveDistance = 1;
-
-    private Unit _unit;
 
     private const string IS_WALKING = "IsWalking";
 
     private Vector3 _targetPosition;
 
-    private void Awake()
+
+
+    protected override void Awake()
     {
-        _unit = GetComponent<Unit>();
+        base.Awake();
         _animator = GetComponentInChildren<Animator>();
         _targetPosition = transform.position;
     }
 
     private void Update()
     {
+        if (!_isActive) return;
         HandleMove();
     }
 
     private void HandleMove()
     {
-        float stopThresoldDistance = 0.1f;
-        float moveDistance = Vector3.Distance(transform.position, _targetPosition);
-        _animator.SetBool(IS_WALKING, false);
-        if (moveDistance < stopThresoldDistance) return;
-
-        float speed = 4f;
         Vector3 moveDirection = (_targetPosition - transform.position).normalized;
-        moveDirection.y = 0;
-        transform.position += speed * Time.deltaTime * moveDirection;
 
         float rotateSpeed = 10f;
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
+
+        float stopThresoldDistance = 0.1f;
+        float moveDistance = Vector3.Distance(transform.position, _targetPosition);
+        _animator.SetBool(IS_WALKING, false);
+        if (moveDistance < stopThresoldDistance)
+        {
+            _isActive = false;
+            return;
+        };
+
+        float speed = 4f;
+        moveDirection.y = 0;
+        transform.position += speed * Time.deltaTime * moveDirection;
 
         _animator.SetBool(IS_WALKING, true);
     }
@@ -76,6 +82,7 @@ public class MoveAction : MonoBehaviour
     public void Move(GridPosition targetPosition)
     {
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
+        _isActive = true;
     }
 
 
