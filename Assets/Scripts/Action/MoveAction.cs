@@ -50,13 +50,7 @@ public class MoveAction : BaseAction
         _animator.SetBool(IS_WALKING, true);
     }
 
-    public bool IsValidActionGridPosition(GridPosition gridPosition)
-    {
-        List<GridPosition> validGridPositions = GetValidListGridPosition();
-        return validGridPositions.Contains(gridPosition);
-    }
-
-    public List<GridPosition> GetValidListGridPosition()
+    public override List<GridPosition> GetValidListGridPosition()
     {
         List<GridPosition> validListGridPosition = new List<GridPosition>();
 
@@ -80,7 +74,7 @@ public class MoveAction : BaseAction
         return validListGridPosition;
     }
 
-    public void Move(GridPosition targetPosition, Action onActionComplete)
+    public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
         _isActive = true;

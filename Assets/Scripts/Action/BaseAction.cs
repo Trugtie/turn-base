@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BaseAction : MonoBehaviour
@@ -14,4 +15,14 @@ public abstract class BaseAction : MonoBehaviour
     }
 
     public abstract string GetActionName();
+
+    public abstract void TakeAction(GridPosition gridPosition, Action onCompleteAction);
+
+    public bool IsValidActionGridPosition(GridPosition gridPosition)
+    {
+        List<GridPosition> validGridPositions = GetValidListGridPosition();
+        return validGridPositions.Contains(gridPosition);
+    }
+
+    public abstract List<GridPosition> GetValidListGridPosition();
 }
