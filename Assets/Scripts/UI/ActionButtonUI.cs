@@ -38,6 +38,5 @@ public class ActionButtonUI : MonoBehaviour
     {
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
         _selectedGameObject.SetActive(selectedAction == _baseAction);
-        Debug.Log(_selectedGameObject.gameObject);
     }
 }

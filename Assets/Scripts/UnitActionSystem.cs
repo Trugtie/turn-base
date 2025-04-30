@@ -9,6 +9,7 @@ public class UnitActionSystem : MonoBehaviour
     public event EventHandler OnSelectedUnitChange;
     public event EventHandler OnSelectedActionChange;
     public event EventHandler OnBusyChange;
+    public event EventHandler OnActionStarted;
 
     [SerializeField] private Unit _selectedUnit;
     [SerializeField] private LayerMask _unitLayerMask;
@@ -64,8 +65,11 @@ public class UnitActionSystem : MonoBehaviour
 
         if (!_selectedAction.IsValidActionGridPosition(gridPosition)) return;
 
+        if (!_selectedUnit.TrySpendActionPointsToTakeAction(_selectedAction)) return;
+
         SetBusy();
         _selectedAction.TakeAction(gridPosition, ClearBusy);
+        OnActionStarted?.Invoke(this, EventArgs.Empty);
     }
 
     private void SetSelectedUnit(Unit unit)
