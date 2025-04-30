@@ -6,6 +6,9 @@ public class ActionButtonUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _actionText;
     [SerializeField] private Button _actionButton;
+    [SerializeField] private GameObject _selectedGameObject;
+
+    private BaseAction _baseAction;
 
     private void Awake()
     {
@@ -15,6 +18,8 @@ public class ActionButtonUI : MonoBehaviour
 
     public void SetBaseAction(BaseAction baseAction)
     {
+        _baseAction = baseAction;
+
         _actionText.SetText(baseAction.GetActionName().ToUpper());
 
         _actionButton.onClick.AddListener(() =>
@@ -27,5 +32,12 @@ public class ActionButtonUI : MonoBehaviour
     {
         _actionText = GetComponentInChildren<TextMeshProUGUI>();
         _actionButton = GetComponent<Button>();
+    }
+
+    public void UpdateSelectedVisual()
+    {
+        BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
+        _selectedGameObject.SetActive(selectedAction == _baseAction);
+        Debug.Log(_selectedGameObject.gameObject);
     }
 }
