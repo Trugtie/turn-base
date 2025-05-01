@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveAction : BaseAction
 {
     [SerializeField] private Animator _animator;
-    [SerializeField] private int _maxMoveDistance = 1;
+    [SerializeField] private int _maxMoveDistance = 4;
 
     private const string IS_WALKING = "IsWalking";
 
@@ -38,8 +38,7 @@ public class MoveAction : BaseAction
         _animator.SetBool(IS_WALKING, false);
         if (moveDistance < stopThresoldDistance)
         {
-            _isActive = false;
-            _onActionComplete();
+            ActionComplete();
             return;
         };
 
@@ -76,9 +75,8 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
+        ActionStart(onActionComplete);
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
-        _isActive = true;
-        _onActionComplete = onActionComplete;
     }
 
     public override string GetActionName()

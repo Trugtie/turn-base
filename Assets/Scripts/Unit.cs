@@ -76,6 +76,13 @@ public class Unit : MonoBehaviour
         OnAnyActionPointsChange?.Invoke(this, EventArgs.Empty);
     }
 
+    public void TakeDamge()
+    {
+        Debug.Log(gameObject.name + " Take damge");
+    }
+
+    public Vector3 GetWorldPosition() => transform.position;
+
     public bool IsEnemy() => _isEnemy;
 
     public int GetActionPoints() => _actionPoints;
