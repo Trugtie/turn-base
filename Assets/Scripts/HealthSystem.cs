@@ -27,7 +27,5 @@ public class HealthSystem : MonoBehaviour
         {
             OnDead?.Invoke(this, EventArgs.Empty);
         }
-
-        Debug.Log(_currentHealth);
     }
 }
