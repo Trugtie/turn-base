@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
-    [SerializeField] private Animator _animator;
     [SerializeField] private int _maxMoveDistance = 4;
 
-    private const string IS_WALKING = "IsWalking";
+    public event EventHandler OnMoveStart;
+    public event EventHandler OnMoveEnd;
 
     private Vector3 _targetPosition;
-
-
 
     protected override void Awake()
     {
         base.Awake();
-        _animator = GetComponentInChildren<Animator>();
         _targetPosition = transform.position;
     }
 
@@ -35,7 +32,9 @@ public class MoveAction : BaseAction
 
         float stopThresoldDistance = 0.1f;
         float moveDistance = Vector3.Distance(transform.position, _targetPosition);
-        _animator.SetBool(IS_WALKING, false);
+
+        OnMoveEnd?.Invoke(this, EventArgs.Empty);
+
         if (moveDistance < stopThresoldDistance)
         {
             ActionComplete();
@@ -46,7 +45,7 @@ public class MoveAction : BaseAction
         moveDirection.y = 0;
         transform.position += speed * Time.deltaTime * moveDirection;
 
-        _animator.SetBool(IS_WALKING, true);
+        OnMoveStart?.Invoke(this, EventArgs.Empty);
     }
 
     public override List<GridPosition> GetValidListGridPosition()

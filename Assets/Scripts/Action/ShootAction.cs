@@ -11,6 +11,15 @@ public class ShootAction : BaseAction
     private Unit _targetUnit;
     private bool _canShootBullet;
 
+    public event EventHandler<OnShootEventArgs> OnShoot;
+
+    public class OnShootEventArgs : EventArgs
+    {
+
+        public Unit TargetUnit;
+        public Unit ShootingUnit;
+    }
+
     private enum ShootingState
     {
         Aiming,
@@ -60,6 +69,12 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
+        OnShoot?.Invoke(this, new OnShootEventArgs
+        {
+            TargetUnit = _targetUnit,
+            ShootingUnit = _unit,
+        });
+
         _targetUnit.TakeDamge();
     }
 
