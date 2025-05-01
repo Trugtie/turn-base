@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     private MoveAction _moveAction;
     private SpinAction _spinAction;
     private BaseAction[] _baseActionArray;
+    private HealthSystem _healthSystem;
 
     private int _actionPoints = MAX_ACTION_POINT;
 
@@ -21,13 +22,22 @@ public class Unit : MonoBehaviour
         _moveAction = GetComponent<MoveAction>();
         _spinAction = GetComponent<SpinAction>();
         _baseActionArray = GetComponents<BaseAction>();
+        _healthSystem = GetComponent<HealthSystem>();
     }
 
     private void Start()
     {
         TurnSystem.Instance.OnTurnChange += TurnSystem_OnTurnChange;
+        _healthSystem.OnDead += _healthSystem_OnDead;
+
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
+    }
+
+    private void _healthSystem_OnDead(object sender, EventArgs e)
+    {
+        LevelGrid.Instance.RemoveUnitAtGridPosition(_gridPosition, this);
+        Destroy(gameObject);
     }
 
     private void Update()
@@ -76,9 +86,9 @@ public class Unit : MonoBehaviour
         OnAnyActionPointsChange?.Invoke(this, EventArgs.Empty);
     }
 
-    public void TakeDamge()
+    public void TakeDamge(int damgeAmount)
     {
-        Debug.Log(gameObject.name + " Take damge");
+        _healthSystem.Damge(damgeAmount);
     }
 
     public Vector3 GetWorldPosition() => transform.position;

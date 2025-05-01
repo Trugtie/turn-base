@@ -75,7 +75,7 @@ public class ShootAction : BaseAction
             ShootingUnit = _unit,
         });
 
-        _targetUnit.TakeDamge();
+        _targetUnit.TakeDamge(40);
     }
 
     private void NextState()
