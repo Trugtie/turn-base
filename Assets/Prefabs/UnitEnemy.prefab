@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: _ragollPrefab
       value: 
       objectReference: {fileID: 3057846792434007027, guid: 39c77bea222ec154697a333c7f416185, type: 3}
+    - target: {fileID: 4937864189404435982, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
+      propertyPath: _maxHealth
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 7757485167604014706, guid: e38c439eba14d824db74071c1bf7bada, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
