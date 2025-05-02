@@ -5,6 +5,7 @@ public class HealthSystem : MonoBehaviour
 {
     [SerializeField] private int _maxHealth = 120;
 
+    public static event EventHandler OnAnyDead;
     public event EventHandler OnDead;
     public event EventHandler OnHealthChange;
 
@@ -32,6 +33,7 @@ public class HealthSystem : MonoBehaviour
         if (_currentHealth == 0)
         {
             OnDead?.Invoke(this, EventArgs.Empty);
+            OnAnyDead?.Invoke(this, EventArgs.Empty);
         }
     }
 

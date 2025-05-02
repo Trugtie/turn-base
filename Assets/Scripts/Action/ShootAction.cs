@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ShootAction : BaseAction
 {
-    private float _totalSpinAmount;
     private int _maxShootDistance = 7;
 
     private Unit _targetUnit;
@@ -100,8 +99,6 @@ public class ShootAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onCompleteAction)
     {
-        ActionStart(onCompleteAction);
-
         _state = ShootingState.Aiming;
         float aimingStateTime = 1f;
         _stateTimer = aimingStateTime;
@@ -110,6 +107,7 @@ public class ShootAction : BaseAction
         _targetUnit = targetUnit;
         _canShootBullet = true;
 
+        ActionStart(onCompleteAction);
     }
 
     public override string GetActionName()
@@ -147,6 +145,10 @@ public class ShootAction : BaseAction
 
         return validListGridPosition;
     }
+
+    public int GetMaxShootDistance() => _maxShootDistance;
+
+    public Unit GetTargetUnit() => _targetUnit;
 
     public override int GetActionPointCost()
     {

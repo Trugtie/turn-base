@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class GridSystemVisualSingle : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private MeshRenderer _meshRenderer;
 
     private void Awake()
     {
-        if (_spriteRenderer != null) return;
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (_meshRenderer != null) return;
+        _meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 
-    public void Show()
+    public void Show(Material gridVisualMaterial)
     {
-        _spriteRenderer.enabled = true;
+        _meshRenderer.material = gridVisualMaterial;
+        _meshRenderer.enabled = true;
     }
 
     public void Hide()
     {
-        _spriteRenderer.enabled = false;
+        _meshRenderer.enabled = false;
     }
 }
