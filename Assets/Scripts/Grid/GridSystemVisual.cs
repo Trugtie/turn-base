@@ -13,6 +13,8 @@ public class GridSystemVisual : MonoBehaviour
 
     private GridSystemVisualSingle[,] _gridSystemVisualSingleArray;
 
+    private List<GridPosition> _rangeGridPositionCache;
+
     public enum GridVisualType
     {
         White,
@@ -86,57 +88,6 @@ public class GridSystemVisual : MonoBehaviour
         UpdateGridVisual();
     }
 
-    private Material GetMaterialFormGridVisualType(GridVisualType gridVisualType)
-    {
-        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in _gridVisualTypeMaterials)
-        {
-            if (gridVisualTypeMaterial.GridVisualType == gridVisualType)
-            {
-                return gridVisualTypeMaterial.Material;
-            }
-        }
-        Debug.Log("Count not find materials in " + gridVisualType);
-        return null;
-    }
-
-    public void HideAllGridPosition()
-    {
-        foreach (GridSystemVisualSingle singleGrid in _gridSystemVisualSingleArray)
-        {
-            singleGrid.Hide();
-        }
-    }
-
-    private void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
-    {
-        foreach (GridPosition gridPosition in gridPositionList)
-        {
-            _gridSystemVisualSingleArray[gridPosition.X, gridPosition.Z].Show(GetMaterialFormGridVisualType(gridVisualType));
-        }
-    }
-
-    private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
-    {
-        List<GridPosition> gridPositionList = new List<GridPosition>();
-
-        for (int x = -range; x <= range; x++)
-        {
-            for (int z = -range; z <= range; z++)
-            {
-                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
-
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
-
-                int testDistance = Math.Abs(x) + Math.Abs(z);
-                if (testDistance > range) continue;
-
-                gridPositionList.Add(testGridPosition);
-            }
-        }
-
-        ShowGridPositionList(gridPositionList, gridVisualType);
-    }
-
     public void UpdateGridVisual()
     {
         Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
@@ -165,4 +116,60 @@ public class GridSystemVisual : MonoBehaviour
         ShowGridPositionList(selectedAction.GetValidListGridPosition(), gridVisualType);
     }
 
+    public void HideAllGridPosition()
+    {
+        foreach (GridSystemVisualSingle singleGrid in _gridSystemVisualSingleArray)
+        {
+            singleGrid.Hide();
+        }
+    }
+
+    private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    {
+        if (_rangeGridPositionCache == null)
+        {
+            _rangeGridPositionCache = new List<GridPosition>();
+        };
+
+        _rangeGridPositionCache.Clear();
+
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
+
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+
+                int testDistance = Math.Abs(x) + Math.Abs(z);
+                if (testDistance > range) continue;
+
+                _rangeGridPositionCache.Add(testGridPosition);
+            }
+        }
+
+        ShowGridPositionList(_rangeGridPositionCache, gridVisualType);
+    }
+
+    private void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    {
+        foreach (GridPosition gridPosition in gridPositionList)
+        {
+            _gridSystemVisualSingleArray[gridPosition.X, gridPosition.Z].Show(GetMaterialFormGridVisualType(gridVisualType));
+        }
+    }
+
+
+    private Material GetMaterialFormGridVisualType(GridVisualType gridVisualType)
+    {
+        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in _gridVisualTypeMaterials)
+        {
+            if (gridVisualTypeMaterial.GridVisualType == gridVisualType)
+            {
+                return gridVisualTypeMaterial.Material;
+            }
+        }
+        Debug.Log("Count not find materials in " + gridVisualType);
+        return null;
+    }
 }
