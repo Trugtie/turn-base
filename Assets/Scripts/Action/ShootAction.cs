@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class ShootAction : BaseAction
@@ -117,9 +116,13 @@ public class ShootAction : BaseAction
 
     public override List<GridPosition> GetValidListGridPosition()
     {
-        List<GridPosition> validListGridPosition = new List<GridPosition>();
-
         GridPosition unitGridPosition = _unit.GetGridPosition();
+        return GetValidListGridPosition(unitGridPosition);
+    }
+
+    public List<GridPosition> GetValidListGridPosition(GridPosition unitGridPosition)
+    {
+        List<GridPosition> validListGridPosition = new List<GridPosition>();
 
         for (int x = -_maxShootDistance; x <= _maxShootDistance; x++)
         {
@@ -153,5 +156,18 @@ public class ShootAction : BaseAction
     public override int GetActionPointCost()
     {
         return 1;
+    }
+
+    public int GetShootableTargetCount(GridPosition gridPosition) => GetValidListGridPosition(gridPosition).Count;
+
+    protected override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
+
+        return new EnemyAIAction
+        {
+            GridPosition = gridPosition,
+            ActionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalize()) * 100f),
+        };
     }
 }
