@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PathFindingGridDebugObject : GridDebugObject
 {
-    [SerializeField] private TextMeshProUGUI _gCostText;
-    [SerializeField] private TextMeshProUGUI _hCostText;
-    [SerializeField] private TextMeshProUGUI _fCostText;
+    [SerializeField] private TextMeshPro _gCostText;
+    [SerializeField] private TextMeshPro _hCostText;
+    [SerializeField] private TextMeshPro _fCostText;
 
     private PathNode _pathNote;
 

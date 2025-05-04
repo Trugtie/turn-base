@@ -9,7 +9,7 @@ public class PathNode
     private int _hCost;
     private int _fCost;
 
-    private PathNode _cameFormPathNote;
+    private PathNode _cameFromPathNote;
 
     public PathNode(GridPosition gridPosition)
     {
@@ -24,4 +24,33 @@ public class PathNode
     public int GetGCost() => _gCost;
     public int GetHCost() => _hCost;
     public int GetFCost() => _fCost;
+
+    public void SetGCost(int gCost)
+    {
+        _gCost = gCost;
+    }
+
+    public void SetHCost(int hCost)
+    {
+        _hCost = hCost;
+    }
+
+    public void CalculateFCost()
+    {
+        _fCost = _gCost + _hCost;
+    }
+
+    public void ResetCameFromPathNode()
+    {
+        _cameFromPathNote = null;
+    }
+
+    public void SetCameFromPathNode(PathNode pathNode)
+    {
+        _cameFromPathNote = pathNode;
+    }
+
+    public PathNode GetCameFromPathNode() => _cameFromPathNote;
+
+    public GridPosition GetGridPosition() => _gridPosition;
 }
