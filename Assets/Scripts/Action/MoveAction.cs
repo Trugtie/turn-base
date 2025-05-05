@@ -9,13 +9,8 @@ public class MoveAction : BaseAction
     public event EventHandler OnMoveStart;
     public event EventHandler OnMoveEnd;
 
-    private Vector3 _targetPosition;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        _targetPosition = transform.position;
-    }
+    private List<Vector3> _targetPositionList;
+    private int _currentIndex;
 
     private void Update()
     {
@@ -25,27 +20,32 @@ public class MoveAction : BaseAction
 
     private void HandleMove()
     {
-        Vector3 moveDirection = (_targetPosition - transform.position).normalized;
+        Vector3 targetPosition = _targetPositionList[_currentIndex];
+        Vector3 moveDirection = (targetPosition - transform.position).normalized;
 
         float rotateSpeed = 10f;
         transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
 
         float stopThresoldDistance = 0.1f;
-        float moveDistance = Vector3.Distance(transform.position, _targetPosition);
+        float moveDistance = Vector3.Distance(transform.position, targetPosition);
 
-        OnMoveEnd?.Invoke(this, EventArgs.Empty);
-
-        if (moveDistance < stopThresoldDistance)
+        if (moveDistance > stopThresoldDistance)
         {
-            ActionComplete();
-            return;
-        };
+            float speed = 4f;
+            moveDirection.y = 0;
+            transform.position += speed * Time.deltaTime * moveDirection;
+        }
+        else
+        {
+            _currentIndex++;
 
-        float speed = 4f;
-        moveDirection.y = 0;
-        transform.position += speed * Time.deltaTime * moveDirection;
+            if (_currentIndex >= _targetPositionList.Count)
+            {
+                OnMoveEnd?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
+            }
 
-        OnMoveStart?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public override List<GridPosition> GetValidListGridPosition()
@@ -64,6 +64,12 @@ public class MoveAction : BaseAction
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
                 if (testGridPosition == unitGridPosition) continue;
                 if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) continue;
+                if (!PathFinding.Instance.IsWalkableGridPosition(testGridPosition)) continue;
+                if (!PathFinding.Instance.HasPath(unitGridPosition, testGridPosition)) continue;
+
+                int pathFindingPathLenghtMultiplier = 10;
+
+                if (PathFinding.Instance.GetPathLenght(unitGridPosition, testGridPosition) > _maxMoveDistance * pathFindingPathLenghtMultiplier) continue;
 
                 validListGridPosition.Add(testGridPosition);
             }
@@ -74,7 +80,17 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition targetPosition, Action onActionComplete)
     {
-        _targetPosition = LevelGrid.Instance.GetWorldPosition(targetPosition);
+        _currentIndex = 0;
+
+        _targetPositionList = new List<Vector3>();
+        List<GridPosition> pathGridPositionList = PathFinding.Instance.FindPath(_unit.GetGridPosition(), targetPosition, out int pathLenght);
+
+        foreach (GridPosition gridPosition in pathGridPositionList)
+        {
+            _targetPositionList.Add(LevelGrid.Instance.GetWorldPosition(gridPosition));
+        }
+
+        OnMoveStart?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
     }
 

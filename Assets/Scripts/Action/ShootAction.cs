@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShootAction : BaseAction
 {
+    [SerializeField] private LayerMask _obstacleLayerMask;
     private int _maxShootDistance = 7;
 
     private Unit _targetUnit;
@@ -141,6 +142,19 @@ public class ShootAction : BaseAction
                 Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
 
                 if (_unit.IsEnemy() == targetUnit.IsEnemy()) continue;
+
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                float unitShoulderHeight = 1.7f;
+                Vector3 direction = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+
+                bool isUnitGridPositionBlockedBySomething = Physics.Raycast(
+                    unitWorldPosition + Vector3.up * unitShoulderHeight,
+                    direction,
+                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                    _obstacleLayerMask
+                    );
+
+                if (isUnitGridPositionBlockedBySomething) continue;
 
                 validListGridPosition.Add(testGridPosition);
             }
