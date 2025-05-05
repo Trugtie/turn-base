@@ -8,6 +8,7 @@ public class PathFinding : MonoBehaviour
     private const int MOVE_DIANGLE_COST = 14;
 
     [SerializeField] private Transform _gridDebugObject;
+    [SerializeField] private LayerMask _obstaclesLayerMask;
 
     public static PathFinding Instance { get; private set; }
 
@@ -25,10 +26,33 @@ public class PathFinding : MonoBehaviour
         }
 
         Instance = this;
+    }
 
-        _gridSystem = new GridSystem<PathNode>(10, 10, 2,
-            (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+    public void Setup(int width, int height, int cellsize)
+    {
+        _width = width;
+        _height = height;
+        _cellSize = cellsize;
+
+        _gridSystem = new GridSystem<PathNode>(_width, _height, _cellSize,
+           (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
         _gridSystem.CreateGridDebugObjects(_gridDebugObject);
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int z = 0; z < _height; z++)
+            {
+                GridPosition gridPosition = new GridPosition(x, z);
+                Vector3 worldPosition = _gridSystem.GetWorldPosition(gridPosition);
+
+                float offsetValue = 5;
+                Vector3 originPosition = worldPosition + Vector3.down * offsetValue;
+                float rayDistance = offsetValue * 2;
+                if (!Physics.Raycast(originPosition, Vector3.up, rayDistance, _obstaclesLayerMask)) continue;
+
+                GetNode(x, z).SetWalkable(false);
+            }
+        }
     }
 
     public List<GridPosition> FindPath(GridPosition startPosition, GridPosition endPosition)
@@ -73,6 +97,12 @@ public class PathFinding : MonoBehaviour
             foreach (PathNode neighBourNode in GetNeighbourList(currentNode))
             {
                 if (closedList.Contains(neighBourNode)) continue;
+
+                if (!neighBourNode.IsWalkable())
+                {
+                    closedList.Add(neighBourNode);
+                    continue;
+                }
 
                 int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighBourNode.GetGridPosition());
 

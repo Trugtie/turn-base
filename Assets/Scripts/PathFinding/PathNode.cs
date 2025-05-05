@@ -11,6 +11,8 @@ public class PathNode
 
     private PathNode _cameFromPathNote;
 
+    private bool _isWalkable = true;
+
     public PathNode(GridPosition gridPosition)
     {
         _gridPosition = gridPosition;
@@ -50,7 +52,12 @@ public class PathNode
         _cameFromPathNote = pathNode;
     }
 
-    public PathNode GetCameFromPathNode() => _cameFromPathNote;
+    public void SetWalkable(bool isWalkable)
+    {
+        _isWalkable = isWalkable;
+    }
 
+    public bool IsWalkable() => _isWalkable;
+    public PathNode GetCameFromPathNode() => _cameFromPathNote;
     public GridPosition GetGridPosition() => _gridPosition;
 }
