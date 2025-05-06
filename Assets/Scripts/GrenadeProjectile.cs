@@ -3,8 +3,16 @@ using UnityEngine;
 
 public class GrenadeProjectile : MonoBehaviour
 {
+    public static event EventHandler OnAnyGrenadeExploded;
+
+    [SerializeField] private ParticleSystem _grenadeVFX;
+    [SerializeField] private TrailRenderer _grenadeTrail;
+    [SerializeField] private AnimationCurve _moveArcYCurve;
+
     private Action _onGrenadeExplodedCallback;
     private Vector3 _targetPosition;
+    private Vector3 _positionXZ;
+    private float _totalDistance;
 
     private void Update()
     {
@@ -13,18 +21,26 @@ public class GrenadeProjectile : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector3 moveDirection = (_targetPosition - transform.position).normalized;
-        float reachedTargetDistance = 0.2f;
-        float toTargetDistance = Vector3.Distance(transform.position, _targetPosition);
-
+        Vector3 moveDirection = (_targetPosition - _positionXZ).normalized;
+        float toTargetDistance = Vector3.Distance(_positionXZ, _targetPosition);
         float moveSpeed = 15f;
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        _positionXZ += moveDirection * moveSpeed * Time.deltaTime;
 
+        float distanceNormalize = 1 - toTargetDistance / _totalDistance;
+        float maxHeightArc = _totalDistance / 4f;
+        float positionY = _moveArcYCurve.Evaluate(distanceNormalize) * maxHeightArc;
+
+        transform.position = new Vector3(_positionXZ.x, positionY, _positionXZ.z);
+
+        float reachedTargetDistance = 0.2f;
         if (toTargetDistance <= reachedTargetDistance)
         {
             HandleExplosion();
+            _grenadeTrail.transform.parent = null;
             Destroy(gameObject);
+            Instantiate(_grenadeVFX, _targetPosition + Vector3.up * 1f, Quaternion.identity);
             _onGrenadeExplodedCallback();
+            OnAnyGrenadeExploded?.Invoke(this, EventArgs.Empty);
             return;
         };
     }
@@ -46,6 +62,9 @@ public class GrenadeProjectile : MonoBehaviour
     public void Setup(GridPosition targetGridPosition, Action onGrenadeBehaviourComplete)
     {
         _targetPosition = LevelGrid.Instance.GetWorldPosition(targetGridPosition);
+        _totalDistance = Vector3.Distance(transform.position, _targetPosition);
+        _positionXZ = transform.position;
+        _positionXZ.y = 0;
         _onGrenadeExplodedCallback = onGrenadeBehaviourComplete;
     }
 }

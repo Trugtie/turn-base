@@ -3,7 +3,6 @@ using UnityEngine;
 public class UnitRagdoll : MonoBehaviour
 {
     [SerializeField] private Transform _ragdollRootBone;
-    [SerializeField] private Vector2 _explosionOffset = new Vector2(0.5f, 0.5f);
     [SerializeField] private float _explosionRange = 1f;
     [SerializeField] private float _explosionForce = 1000f;
 
@@ -13,15 +12,10 @@ public class UnitRagdoll : MonoBehaviour
         transform.rotation = originalTransform.rotation;
         MatchAllChildTransform(originalBone, _ragdollRootBone);
 
-        Vector3 explosionPosition = _ragdollRootBone.forward * _explosionOffset.x + _ragdollRootBone.up * _explosionOffset.y + transform.position;
+        Vector3 randomDirection = new Vector3(Random.Range(-1f, +1f), 0, Random.Range(-1f, +1f));
+        Vector3 explosionPosition = transform.position + randomDirection;
 
         ApplyExplosionToRagdoll(_ragdollRootBone, _explosionForce, explosionPosition, _explosionRange);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Vector3 explosionPosition = _ragdollRootBone.forward * _explosionOffset.x + _ragdollRootBone.up * _explosionOffset.y + transform.position;
-        Gizmos.DrawWireSphere(explosionPosition, _explosionRange);
     }
 
     private void MatchAllChildTransform(Transform originalRootBone, Transform cloneBone)
