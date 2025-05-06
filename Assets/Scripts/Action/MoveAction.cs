@@ -69,7 +69,10 @@ public class MoveAction : BaseAction
 
                 int pathFindingPathLenghtMultiplier = 10;
 
-                if (PathFinding.Instance.GetPathLenght(unitGridPosition, testGridPosition) > _maxMoveDistance * pathFindingPathLenghtMultiplier) continue;
+                if (PathFinding.Instance.GetPathLenght(
+                    unitGridPosition, testGridPosition)
+                    > _maxMoveDistance * pathFindingPathLenghtMultiplier)
+                    continue;
 
                 validListGridPosition.Add(testGridPosition);
             }
