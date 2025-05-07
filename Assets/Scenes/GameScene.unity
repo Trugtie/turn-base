@@ -1383,6 +1383,8 @@ MonoBehaviour:
     Material: {fileID: 2100000, guid: e0be208f920d5dd488bb1ebf82eef085, type: 2}
   - GridVisualType: 4
     Material: {fileID: 2100000, guid: fb42b38672d04044bbfcc2fe398baa37, type: 2}
+  - GridVisualType: 5
+    Material: {fileID: 2100000, guid: 039398c736e6d8f4bb7401b70398ff22, type: 2}
 --- !u!4 &520679595
 Transform:
   m_ObjectHideFlags: 0
