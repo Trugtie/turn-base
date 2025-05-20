@@ -9,6 +9,7 @@ public class GridObject
     private GridPosition _gridPosition;
 
     private List<Unit> _listUnit;
+    private Door _door;
 
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
     {
@@ -55,4 +56,7 @@ public class GridObject
         if (!HasAnyUnit()) return null;
         return _listUnit[0];
     }
+
+    public Door GetDoor() => _door;
+    public void SetDoor(Door door) { _door = door; }
 }

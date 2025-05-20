@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     private BaseAction[] _baseActionArray;
     private HealthSystem _healthSystem;
 
-    private int _actionPoints = MAX_ACTION_POINT;
+    [SerializeField] private int _actionPoints = MAX_ACTION_POINT;
 
     private void Awake()
     {
